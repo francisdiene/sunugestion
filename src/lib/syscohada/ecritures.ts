@@ -86,16 +86,17 @@ export async function ecritureVentePayee(
   const ref     = vente.numero
   const lib     = `Encaissement ${vente.numero}`
 
-  const compteTreso = {
-    cash:         comptes.find('571'),
-    wave:         comptes.find('572'),
-    orange_money: comptes.find('573'),
-    virement:     comptes.find('521'),
-    cheque:       comptes.find('521'),
-    credit:       comptes.find('411'),
-  }[vente.mode_paiement || 'cash'] || comptes.find('571')
+ const modeMap: Record<string, string | undefined> = {
+  cash:         comptes.find('571'),
+  wave:         comptes.find('572'),
+  orange_money: comptes.find('573'),
+  virement:     comptes.find('521'),
+  cheque:       comptes.find('521'),
+  credit:       comptes.find('411'),
+}
+const compteTreso = modeMap[vente.mode_paiement || 'cash'] || comptes.find('571')
 
-  const c411 = comptes.find('411')
+const c411 = comptes.find('411')
 
   if (compteTreso) await insererEcriture(client, tenantId, userId, { compteId: compteTreso, journal: 'CA', date, libelle: lib, debit: Number(vente.montant_ttc), pieceRef: ref, lotId })
   if (c411)        await insererEcriture(client, tenantId, userId, { compteId: c411,        journal: 'CA', date, libelle: lib, credit: Number(vente.montant_ttc), pieceRef: ref, lotId })
@@ -169,12 +170,13 @@ export async function ecritureDepense(
   const prefix = compteCharge[depense.categorie] || '658'
   const cCharge = comptes.find(prefix)
 
-  const compteTreso = {
+  const modeMap: Record<string, string | undefined> = {
     cash:         comptes.find('571'),
     wave:         comptes.find('572'),
     orange_money: comptes.find('573'),
     virement:     comptes.find('521'),
-  }[depense.mode_paiement || 'cash'] || comptes.find('571')
+  }
+  const compteTreso = modeMap[depense.mode_paiement || 'cash'] || comptes.find('571')
 
   if (cCharge)  await insererEcriture(client, tenantId, userId, { compteId: cCharge, journal: 'CA', date, libelle: lib, debit: Number(depense.montant), lotId })
   if (compteTreso) await insererEcriture(client, tenantId, userId, { compteId: compteTreso, journal: 'CA', date, libelle: lib, credit: Number(depense.montant), lotId })
