@@ -2,23 +2,26 @@ import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
 import { type Role, type Module, canView } from '@/lib/auth/roles'
 
-const PUBLIC_PATHS = ['/auth/login', '/auth/register', '/api/auth/login', '/api/auth/register', '/catalogue', '/api/public']
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'sunugestion-secret-key-2025-francis-tech')
-const DEV_TENANT = 'a0000000-0000-0000-0000-000000000001'
-const DEV_USER   = 'a0000000-0000-0000-0000-000000000001'
+const PUBLIC_PATHS = [
+  '/auth/login', '/auth/register', '/auth/admin',
+  '/api/auth/login', '/api/auth/register', '/api/admin/login',
+  '/catalogue', '/api/public'
+]
 
-// Mapping URL → module
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'sunugestion-secret-key-2025-francis-tech')
+
 const PAGE_MODULE: Record<string, Module> = {
   '/dashboard/analytics':    'analytics',
   '/dashboard/ventes':       'ventes',
+  '/dashboard/pos':          'ventes',
   '/dashboard/clients':      'clients',
   '/dashboard/produits':     'produits',
   '/dashboard/stock':        'stock',
+  '/dashboard/inventaire':   'stock',
   '/dashboard/fournisseurs': 'fournisseurs',
   '/dashboard/achats':       'achats',
   '/dashboard/depenses':     'depenses',
   '/dashboard/employes':     'employes',
-  '/dashboard/comptabilite': 'comptabilite',
   '/dashboard/equipe':       'equipe',
   '/dashboard/parametres':   'parametres',
 }
@@ -33,7 +36,6 @@ const API_MODULE: Record<string, Module> = {
   '/api/achats':       'achats',
   '/api/depenses':     'depenses',
   '/api/employes':     'employes',
-  '/api/comptabilite': 'comptabilite',
   '/api/equipe':       'equipe',
   '/api/tenants':      'parametres',
 }
@@ -51,55 +53,64 @@ export default async function proxy(request: NextRequest) {
   if (PUBLIC_PATHS.some(p => pathname.startsWith(p))) return NextResponse.next()
   if (pathname.startsWith('/_next') || pathname.startsWith('/favicon')) return NextResponse.next()
 
-  const token = request.cookies.get('sg_token')?.value
-    || request.headers.get('authorization')?.replace('Bearer ', '')
+  // ─── SUPERADMIN ───────────────────────────────────────────────
+  if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+    const adminToken = request.cookies.get('sg_admin_token')?.value
+    if (!adminToken) {
+      if (pathname.startsWith('/api/')) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      return NextResponse.redirect(new URL('/auth/admin', request.url))
+    }
+    try {
+      const { payload } = await jwtVerify(adminToken, JWT_SECRET)
+      if (payload.role !== 'superadmin') throw new Error('Not superadmin')
+      const headers = new Headers(request.headers)
+      headers.set('x-admin-role', 'superadmin')
+      headers.set('x-admin-id', payload.adminId as string)
+      return NextResponse.next({ request: { headers } })
+    } catch {
+      if (pathname.startsWith('/api/')) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+      return NextResponse.redirect(new URL('/auth/admin', request.url))
+    }
+  }
 
-  let tenantId = DEV_TENANT
-  let userId   = DEV_USER
-  let role: Role = 'owner'
-  let authenticated = false
+  // ─── TENANT USERS ─────────────────────────────────────────────
+  const token = request.cookies.get('sg_token')?.value
+  let tenantId = ''; let userId = ''; let role: Role = 'owner'
 
   if (token) {
     try {
       const { payload } = await jwtVerify(token, JWT_SECRET)
-      tenantId      = payload.tenantId as string
-      userId        = payload.userId as string
-      role          = payload.role as Role
-      authenticated = true
+      tenantId = payload.tenantId as string
+      userId   = payload.userId as string
+      role     = payload.role as Role
     } catch {
-      if (!pathname.startsWith('/api/')) {
-        return NextResponse.redirect(new URL('/auth/login', request.url))
-      }
+      if (!pathname.startsWith('/api/')) return NextResponse.redirect(new URL('/auth/login', request.url))
     }
   } else {
-    if (!pathname.startsWith('/api/')) {
-      return NextResponse.redirect(new URL('/auth/login', request.url))
-    }
+    if (!pathname.startsWith('/api/')) return NextResponse.redirect(new URL('/auth/login', request.url))
   }
 
-  // Vérification des permissions sur les pages UI
+  // Vérification permissions pages
   if (!pathname.startsWith('/api/') && pathname.startsWith('/dashboard/')) {
     const mod = getModule(pathname, PAGE_MODULE)
     if (mod && !canView(role, mod)) {
-      // Rediriger vers la première page accessible
       return NextResponse.redirect(new URL('/dashboard/ventes', request.url))
     }
   }
 
-  // Vérification des permissions sur les API
+  // Vérification permissions API
   if (pathname.startsWith('/api/') && !pathname.startsWith('/api/auth')) {
     const mod = getModule(pathname, API_MODULE)
     if (mod && !canView(role, mod)) {
-      return NextResponse.json({ error: 'Accès refusé — permissions insuffisantes' }, { status: 403 })
+      return NextResponse.json({ error: 'Accès refusé' }, { status: 403 })
     }
   }
 
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set('x-tenant-id', tenantId)
-  requestHeaders.set('x-user-id', userId)
-  requestHeaders.set('x-user-role', role)
-
-  return NextResponse.next({ request: { headers: requestHeaders } })
+  const headers = new Headers(request.headers)
+  headers.set('x-tenant-id', tenantId)
+  headers.set('x-user-id', userId)
+  headers.set('x-user-role', role)
+  return NextResponse.next({ request: { headers } })
 }
 
 export const config = {
