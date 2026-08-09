@@ -1,21 +1,20 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
+import type { Metadata, Viewport } from 'next'
 
 export const metadata: Metadata = {
   title: 'SunuGestion — Gestion PME Sénégal',
-  description: 'Plateforme de gestion pour commerçants et PME au Sénégal. Plan comptable SYSCOHADA.',
+  description: 'Plateforme SaaS de gestion pour commerçants et PME au Sénégal',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body className={inter.className}>
+      <body style={{ margin: 0, padding: 0, fontFamily: 'Arial, sans-serif' }}>
         {children}
       </body>
     </html>
