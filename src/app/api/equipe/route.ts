@@ -10,9 +10,7 @@ export async function GET(request: NextRequest) {
       FROM users WHERE tenant_id = $1 ORDER BY role ASC, nom_complet ASC
     `, [tenantId])
     return NextResponse.json({ data: rows })
-  } catch (e) {
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
-  }
+  } catch { return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 }) }
 }
 
 export async function POST(request: NextRequest) {
@@ -30,7 +28,5 @@ export async function POST(request: NextRequest) {
       VALUES ($1,$2,$3,$4,$5,$6) RETURNING id, nom_complet, email, role
     `, [tenantId, email, hash, nom_complet, userRole || 'vendeur', telephone || null])
     return NextResponse.json({ data: res[0] }, { status: 201 })
-  } catch (e) {
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
-  }
+  } catch { return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 }) }
 }

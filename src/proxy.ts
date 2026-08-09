@@ -14,6 +14,7 @@ const PAGE_MODULE: Record<string, Module> = {
   '/dashboard/analytics':    'analytics',
   '/dashboard/ventes':       'ventes',
   '/dashboard/pos':          'ventes',
+  '/dashboard/clients/':  'clients',
   '/dashboard/clients':      'clients',
   '/dashboard/produits':     'produits',
   '/dashboard/stock':        'stock',

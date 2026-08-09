@@ -220,7 +220,7 @@ export default function VentesPage() {
                     <td style={{ padding: '13px 16px' }}>
                       <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: s.bg, color: s.color }}>{s.label}</span>
                     </td>
-                    <td style={{ padding: '13px 16px', fontSize: 12, color: '#aaa' }}>{v.date_vente}</td>
+                    <td style={{ padding: '13px 16px', fontSize: 12, color: '#aaa' }}>{new Date(v.date_vente).toLocaleDateString('fr-FR')}</td>
                     <td style={{ padding: '13px 16px' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
                         {v.statut === 'brouillon' && (
