@@ -20,21 +20,16 @@ export async function POST(request: NextRequest) {
   const tenantId = request.headers.get('x-tenant-id')!
   const userId   = request.headers.get('x-user-id')!
   try {
-    const body = await request.json()
-    const { montant, description, date_depense, categorie, mode_paiement, beneficiaire } = body
+    const { montant, description, date_depense, mode_paiement, beneficiaire } = await request.json()
 
     const depense = await transaction(tenantId, async (client) => {
       const res = await client.query(`
-        INSERT INTO depenses (tenant_id, montant, description, date_depense, categorie, mode_paiement, beneficiaire, created_by)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *
+        INSERT INTO depenses (tenant_id, montant, description, date_depense, mode_paiement, beneficiaire, created_by)
+        VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *
       `, [tenantId, montant, description,
           date_depense || new Date().toISOString().split('T')[0],
-          categorie || 'Divers', mode_paiement || 'cash',
+          mode_paiement || 'cash',
           beneficiaire || null, userId])
-
-      // Générer écritures SYSCOHADA automatiquement
-      await ecritureDepense(client, tenantId, userId, res.rows[0])
-
       return res.rows[0]
     })
 
