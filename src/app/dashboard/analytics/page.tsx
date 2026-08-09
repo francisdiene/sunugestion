@@ -5,7 +5,7 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContai
 
 interface AnalyticsData {
   ca_par_jour: { date: string; ca: number; nb_ventes: number }[]
-  top_produits: { nom: string; total_vendu: number; ca: number }[]
+  top_produits: { nom: string; qte: number; ca: number }[]
   depenses_par_categorie: { categorie: string; total: number }[]
   resume: { ca_total: number; nb_ventes: number; panier_moyen: number; total_depenses: number }
 }
@@ -13,7 +13,10 @@ interface AnalyticsData {
 const COLORS = ['#1d9e75', '#185FA5', '#534AB7', '#D85A30', '#BA7517', '#0f6e56']
 
 function fmt(n: number) { return Number(n || 0).toLocaleString('fr-FR') }
-function fmtDate(d: string) { return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) }
+function fmtDate(d: string) {
+  try { return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }) }
+  catch { return d }
+}
 
 export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null)
@@ -24,7 +27,37 @@ export default function AnalyticsPage() {
     setLoading(true)
     fetch(`/api/analytics?periode=${periode}`)
       .then(r => r.json())
-      .then(d => { if (d.data) setData(d.data) })
+      .then(d => {
+        if (d) {
+          const depenses = d.depenses_par_categorie || []
+          const totalDepenses = depenses.reduce((s: number, c: any) => s + parseFloat(c.total || 0), 0)
+          const nbVentes = d.resume_mois?.nb_ventes || 0
+          const caMois = parseFloat(d.resume_mois?.ca_mois || 0)
+
+          setData({
+            ca_par_jour: (d.ca_par_jour || []).map((j: any) => ({
+              date: j.date,
+              ca: parseFloat(j.ca || 0),
+              nb_ventes: parseInt(j.nb || 0),
+            })),
+            top_produits: (d.top_produits || []).map((p: any) => ({
+              nom: p.nom,
+              qte: parseFloat(p.qte || 0),
+              ca: parseFloat(p.ca || 0),
+            })),
+            depenses_par_categorie: depenses.map((c: any) => ({
+              categorie: c.categorie || 'Divers',
+              total: parseFloat(c.total || 0),
+            })),
+            resume: {
+              ca_total: caMois,
+              nb_ventes: nbVentes,
+              panier_moyen: nbVentes > 0 ? caMois / nbVentes : 0,
+              total_depenses: totalDepenses,
+            }
+          })
+        }
+      })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [periode])
@@ -63,10 +96,10 @@ export default function AnalyticsPage() {
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 24 }}>
         {[
-          { label: 'Chiffre d\'affaires', value: `${fmt(data?.resume?.ca_total || 0)} XOF`, color: '#1d9e75', bg: '#e8f8f2' },
-          { label: 'Nombre de ventes', value: data?.resume?.nb_ventes || 0, color: '#185FA5', bg: '#e6f1fb' },
-          { label: 'Panier moyen', value: `${fmt(data?.resume?.panier_moyen || 0)} XOF`, color: '#534AB7', bg: '#eeedfe' },
-          { label: 'Total dépenses', value: `${fmt(data?.resume?.total_depenses || 0)} XOF`, color: '#D85A30', bg: '#faece7' },
+          { label: 'Chiffre d\'affaires', value: `${fmt(data?.resume?.ca_total || 0)} XOF`, color: '#1d9e75' },
+          { label: 'Nombre de ventes',    value: data?.resume?.nb_ventes || 0,              color: '#185FA5' },
+          { label: 'Panier moyen',        value: `${fmt(data?.resume?.panier_moyen || 0)} XOF`, color: '#534AB7' },
+          { label: 'Total dépenses',      value: `${fmt(data?.resume?.total_depenses || 0)} XOF`, color: '#D85A30' },
         ].map(k => (
           <div key={k.label} style={{ background: '#fff', borderRadius: 12, padding: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', borderLeft: `3px solid ${k.color}` }}>
             <div style={{ fontSize: 11, color: '#aaa', marginBottom: 6 }}>{k.label}</div>
@@ -129,7 +162,9 @@ export default function AnalyticsPage() {
             <>
               <ResponsiveContainer width="100%" height={160}>
                 <PieChart>
-                  <Pie data={data.depenses_par_categorie} dataKey="total" nameKey="categorie" cx="50%" cy="50%" outerRadius={70} label={({ categorie, percent }) => `${(percent * 100).toFixed(0)}%`} labelLine={false}>
+                  <Pie data={data.depenses_par_categorie} dataKey="total" nameKey="categorie"
+                    cx="50%" cy="50%" outerRadius={70}
+                    label={({ percent }) => `${(percent * 100).toFixed(0)}%`} labelLine={false}>
                     {data.depenses_par_categorie.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                   </Pie>
                   <Tooltip formatter={(v: number) => [`${fmt(v)} XOF`]} />
@@ -140,7 +175,7 @@ export default function AnalyticsPage() {
                   <div key={d.categorie} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '1px solid #f7f7f7', fontSize: 12 }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#555' }}>
                       <span style={{ width: 10, height: 10, borderRadius: '50%', background: COLORS[i % COLORS.length], display: 'inline-block' }} />
-                      {d.categorie || 'Divers'}
+                      {d.categorie}
                     </span>
                     <span style={{ fontWeight: 700, color: '#D85A30' }}>{fmt(d.total)} XOF</span>
                   </div>
