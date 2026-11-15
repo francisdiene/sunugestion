@@ -18,7 +18,7 @@ INSERT INTO admins (email, password_hash, nom_complet) VALUES (
 
 -- Vue globale stats tenants
 CREATE OR REPLACE VIEW admin_tenants_stats AS
-SELECT 
+SELECT
   t.id, t.nom, t.slug, t.plan, t.email, t.telephone, t.created_at,
   (SELECT COUNT(*) FROM users u WHERE u.tenant_id = t.id)::int as nb_users,
   (SELECT COUNT(*) FROM produits p WHERE p.tenant_id = t.id)::int as nb_produits,

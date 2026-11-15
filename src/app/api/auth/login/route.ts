@@ -1,22 +1,31 @@
+
 import { NextRequest, NextResponse } from 'next/server'
 import { SignJWT } from 'jose'
 import bcrypt from 'bcryptjs'
 import pool from '@/lib/db'
 import { z } from 'zod'
 
+// Validation des données
 const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 })
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'sunugestion-secret-key')
+// Configuration JWT sécurisée
+const jwtSecret = process.env.JWT_SECRET
+
+if (!jwtSecret || jwtSecret.length < 32) {
+  throw new Error('JWT_SECRET absent ou trop court')
+}
+
+const JWT_SECRET = new TextEncoder().encode(jwtSecret)
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { email, password } = loginSchema.parse(body)
 
-    // Chercher l'utilisateur (sans RLS pour l'auth)
+    // Chercher l'utilisateur
     const result = await pool.query(
       `SELECT u.*, t.slug as tenant_slug, t.nom as tenant_nom, t.plan
        FROM users u
@@ -26,13 +35,25 @@ export async function POST(request: NextRequest) {
     )
 
     const user = result.rows[0]
+
     if (!user) {
-      return NextResponse.json({ error: 'Email ou mot de passe incorrect' }, { status: 401 })
+      return NextResponse.json(
+        { error: 'Email ou mot de passe incorrect' },
+        { status: 401 }
+      )
     }
 
-    const validPassword = await bcrypt.compare(password, user.password_hash)
+    // Vérifier le mot de passe
+    const validPassword = await bcrypt.compare(
+      password,
+      user.password_hash
+    )
+
     if (!validPassword) {
-      return NextResponse.json({ error: 'Email ou mot de passe incorrect' }, { status: 401 })
+      return NextResponse.json(
+        { error: 'Email ou mot de passe incorrect' },
+        { status: 401 }
+      )
     }
 
     // Générer le JWT
@@ -74,16 +95,25 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 jours
+      maxAge: 60 * 60 * 24 * 7,
       path: '/',
     })
 
     return response
+
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: 'Données invalides', details: error.errors }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Données invalides', details: error.errors },
+        { status: 400 }
+      )
     }
+
     console.error('Login error:', error)
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
+
+    return NextResponse.json(
+      { error: 'Erreur serveur' },
+      { status: 500 }
+    )
   }
 }

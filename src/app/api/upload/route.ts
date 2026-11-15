@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     // Nom unique
     const mimeToExt: Record<string, string> = {
   'image/jpeg': 'jpeg',
-  'image/jpg': 'jpeg', 
+  'image/jpg': 'jpeg',
   'image/png': 'png',
   'image/webp': 'webp',
    }

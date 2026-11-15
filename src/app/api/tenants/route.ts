@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const tenantId = request.headers.get('x-tenant-id')!
   try {
     const rows = await query(tenantId, `
-      SELECT t.*, 
+      SELECT t.*,
         (SELECT COUNT(*) FROM users WHERE tenant_id = t.id) as nb_users,
         (SELECT COUNT(*) FROM produits WHERE tenant_id = t.id) as nb_produits
       FROM tenants t WHERE t.id = $1
