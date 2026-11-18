@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 
 export const metadata: Metadata = {
-  title: 'SunuGestion — Gestion PME Sénégal',
+  title: 'TerangaGestion — Gestion PME Sénégal',
   description: 'Plateforme SaaS de gestion pour commerçants et PME au Sénégal',
 }
 

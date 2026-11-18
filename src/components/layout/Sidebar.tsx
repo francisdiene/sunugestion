@@ -58,9 +58,9 @@ export default function Sidebar({ onClose }: SidebarProps) {
       {/* Logo + bouton fermer */}
       <div style={{ padding: '16px', borderBottom: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 9, background: 'linear-gradient(135deg,#1d9e75,#0f6e56)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800, color: '#fff', flexShrink: 0 }}>S</div>
+          <div style={{ width: 34, height: 34, borderRadius: 9, background: 'linear-gradient(135deg,#1d9e75,#0f6e56)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 800, color: '#fff', flexShrink: 0 }}><img src="/terangagestion-icon.svg" alt="" width="34" height="34" /></div>
           <div>
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: 13 }}>SunuGestion</div>
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: 13 }}>TerangaGestion</div>
             <div style={{ color: '#5de3b0', fontSize: 10 }}>PME · Sénégal</div>
           </div>
         </div>

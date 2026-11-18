@@ -49,14 +49,7 @@ export default function LoginPage() {
       }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <div style={{
-            width: 52, height: 52, borderRadius: 14,
-            background: 'linear-gradient(135deg, #1d9e75, #0a1628)',
-            margin: '0 auto 14px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 24, color: '#fff', fontWeight: 800,
-          }}>S</div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: '#1a1a1a', margin: 0 }}>SunuGestion</h1>
+          <img src="/terangagestion-logo.png" alt="TerangaGestion" style={{ width: 230, maxWidth: "100%", height: "auto", objectFit: "contain", margin: "0 auto 14px", display: "block" }} />
           <p style={{ fontSize: 13, color: '#aaa', marginTop: 4 }}>Connectez-vous à votre espace</p>
         </div>
 

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 180 180" role="img" aria-label="TerangaGestion">
+<rect x="0" y="0" width="180" height="180" rx="34" fill="#064E3B"/>
+
+<g>
+  <path d="M24 28C24 15.85 33.85 6 46 6H166C163.5 31.5 145.8 49 120 49H78L63 174H20L36 49H24V28Z" fill="#087A55"/>
+  <path d="M62 174C68 132 90 103 124 83C145 71 158 57 160 39" fill="none" stroke="#D9A441" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="162" cy="24" r="10" fill="#D9A441"/>
+</g>
+
+</svg>
