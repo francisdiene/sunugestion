@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { query, transaction } from '@/lib/db'
 
-// GET /api/ventes — liste des ventes du tenant
+// GET /api/ventes â€” liste des ventes du tenant
 export async function GET(request: NextRequest) {
   const tenantId = request.headers.get('x-tenant-id')!
   const { searchParams } = new URL(request.url)
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/ventes — créer une vente avec ses lignes
+// POST /api/ventes â€” crÃ©er une vente avec ses lignes
 export async function POST(request: NextRequest) {
   const tenantId = request.headers.get('x-tenant-id')!
   const userId = request.headers.get('x-user-id')!
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
 
       for (const ligne of lignes) {
         const ht = ligne.quantite * ligne.prix_unitaire * (1 - (ligne.remise_pct || 0) / 100)
-        const tva = ht * (ligne.tva_taux || 18) / 100
+        const tva = ht * (ligne.tva_taux ?? 18) / 100
         montant_ht += ht
         montant_tva += tva
       }
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
       montant_tva = montant_tva * (1 - remise)
       const montant_ttc = montant_ht + montant_tva
 
-      // Créer la vente
+      // CrÃ©er la vente
       const venteResult = await client.query(`
         INSERT INTO ventes (tenant_id, client_id, depot_id, type, statut,
           date_vente, date_echeance, montant_ht, montant_tva, montant_ttc,
@@ -98,17 +98,17 @@ export async function POST(request: NextRequest) {
 
       const venteId = venteResult.rows[0].id
 
-      // Insérer les lignes
+      // InsÃ©rer les lignes
       for (let i = 0; i < lignes.length; i++) {
         const l = lignes[i]
         const ht = l.quantite * l.prix_unitaire * (1 - (l.remise_pct || 0) / 100) * (1 - remise)
-        const tva = ht * (l.tva_taux || 18) / 100
+        const tva = ht * (l.tva_taux ?? 18) / 100
         await client.query(`
           INSERT INTO vente_lignes (tenant_id, vente_id, produit_id, designation,
             quantite, prix_unitaire, remise_pct, tva_taux, montant_ht, montant_tva, montant_ttc, ordre)
           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
         `, [tenantId, venteId, l.produit_id || null, l.designation,
-            l.quantite, l.prix_unitaire, l.remise_pct || 0, l.tva_taux || 18,
+            l.quantite, l.prix_unitaire, l.remise_pct || 0, l.tva_taux ?? 18,
             ht, tva, ht + tva, i])
       }
 
@@ -127,3 +127,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
+

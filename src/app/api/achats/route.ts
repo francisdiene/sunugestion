@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { query, transaction } from '@/lib/db'
 import { ecritureAchatRecu } from '@/lib/syscohada/ecritures'
 
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       for (const l of lignes) {
         const lht = l.quantite * l.prix_unitaire
         ht  += lht
-        tva += lht * (l.tva_taux || 18) / 100
+        tva += lht * (l.tva_taux ?? 18) / 100
       }
       const ttc = ht + tva
 
@@ -47,10 +47,10 @@ export async function POST(request: NextRequest) {
           INSERT INTO achat_lignes (tenant_id, achat_id, produit_id, designation, quantite, prix_unitaire, tva_taux, montant_ht, montant_ttc, ordre)
           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
         `, [tenantId, achatId, l.produit_id || null, l.designation,
-            l.quantite, l.prix_unitaire, l.tva_taux || 18,
-            lht, lht * (1 + (l.tva_taux || 18) / 100), i])
+            l.quantite, l.prix_unitaire, l.tva_taux ?? 18,
+            lht, lht * (1 + (l.tva_taux ?? 18) / 100), i])
 
-        // Mettre à jour le stock à la réception
+        // Mettre Ã  jour le stock Ã  la rÃ©ception
         if (l.produit_id) {
           const depotRes = await client.query(
             'SELECT id FROM depots WHERE tenant_id = $1 AND is_principal = true LIMIT 1', [tenantId]
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Générer écritures SYSCOHADA
+      // GÃ©nÃ©rer Ã©critures SYSCOHADA
       await ecritureAchatRecu(client, tenantId, userId, res.rows[0])
 
       return res.rows[0]
@@ -90,3 +90,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
+

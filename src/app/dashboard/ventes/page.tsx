@@ -21,6 +21,7 @@ export default function VentesPage() {
   const [showForm, setShowForm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [pdfLoading, setPdfLoading] = useState<string | null>(null)
+  const [validationEnCours, setValidationEnCours] = useState<string | null>(null)
   const [msg, setMsg] = useState('')
   const [form, setForm] = useState({ client_id: '', type: 'facture', mode_paiement: 'cash', notes: '', date_vente: new Date().toISOString().split('T')[0] })
   const [lignes, setLignes] = useState<Ligne[]>([{ produit_id: '', designation: '', quantite: 1, prix_unitaire: 0, remise_pct: 0, tva_taux: 18 }])
@@ -70,15 +71,33 @@ export default function VentesPage() {
   }
 
   async function validerVente(venteId: string) {
-    try {
-      const res = await fetch(`/api/ventes/${venteId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ statut: 'valide' }),
-      })
-      if (res.ok) { setMsg('✓ Vente validée'); loadVentes() }
-    } catch { setMsg('Erreur validation') }
+  if (validationEnCours === venteId) return
+
+  setValidationEnCours(venteId)
+  setMsg('Validation en cours...')
+
+  try {
+    const res = await fetch(`/api/ventes/${venteId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ statut: 'valide' }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      setMsg(data.error || 'Erreur de validation')
+      return
+    }
+
+    setMsg('✓ Vente validée')
+    await loadVentes()
+  } catch {
+    setMsg('Erreur réseau')
+  } finally {
+    setValidationEnCours(null)
   }
+}
 
   async function payerVente(venteId: string) {
     try {
@@ -224,9 +243,22 @@ export default function VentesPage() {
                     <td style={{ padding: '13px 16px' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
                         {v.statut === 'brouillon' && (
-                          <button onClick={() => validerVente(v.id)} style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: '#e6f1fb', color: '#185FA5', fontSize: 11, cursor: 'pointer', fontWeight: 600 }}>
-                            ✓ Valider
-                          </button>
+                          <button
+  onClick={() => validerVente(v.id)}
+  disabled={validationEnCours === v.id}
+  style={{
+    padding: '5px 10px',
+    borderRadius: 6,
+    border: 'none',
+    background: validationEnCours === v.id ? '#ccc' : '#e6f1fb',
+    color: '#185FA5',
+    fontSize: 11,
+    cursor: validationEnCours === v.id ? 'not-allowed' : 'pointer',
+    fontWeight: 600,
+  }}
+>
+  {validationEnCours === v.id ? 'Validation...' : '✓ Valider'}
+</button>
                         )}
                         {v.statut === 'valide' && (
                           <button onClick={() => payerVente(v.id)} style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: '#e8f8f2', color: '#0f6e56', fontSize: 11, cursor: 'pointer', fontWeight: 600 }}>

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+﻿import { NextRequest, NextResponse } from 'next/server'
 import { query, transaction } from '@/lib/db'
 
 export async function GET(request: NextRequest) {
@@ -39,12 +39,12 @@ export async function POST(request: NextRequest) {
         INSERT INTO produits (tenant_id, nom, categorie_id, code_barre, reference, prix_vente, prix_achat, tva_taux, unite, description, partage_catalogue, is_service)
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *
       `, [tenantId, nom, categorie_id || null, code_barre || null, reference || null,
-          prix_vente || 0, prix_achat || 0, tva_taux || 18, unite || 'pcs',
+          prix_vente || 0, prix_achat || 0, tva_taux ?? 18, unite || 'pcs',
           description || null, partage_catalogue || false, is_service || false])
 
       const produitId = res.rows[0].id
 
-      // Stock initial dans le dépôt principal
+      // Stock initial dans le dÃ©pÃ´t principal
       if (stock_initial && stock_initial > 0) {
         const depot = await client.query(`SELECT id FROM depots WHERE tenant_id = $1 AND is_principal = true LIMIT 1`, [tenantId])
         if (depot.rows[0]) {
@@ -73,3 +73,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 })
   }
 }
+

@@ -48,11 +48,19 @@ export async function PATCH(
 
     const result = await transaction(tenantId, async (client) => {
       const venteRes = await client.query(
-        'SELECT * FROM ventes WHERE id = $1 AND tenant_id = $2', [id, tenantId]
+       'SELECT * FROM ventes WHERE id = $1 AND tenant_id = $2 FOR UPDATE', [id, tenantId]
       )
       const vente = venteRes.rows[0]
       if (!vente) throw new Error('Vente introuvable')
       const ancienStatut = vente.statut
+
+      if (statut === 'valide' && ancienStatut !== 'brouillon') {
+  throw new Error('Cette vente a déjà été validée.')
+}
+
+if (statut === 'paye' && ancienStatut !== 'valide') {
+  throw new Error('La vente doit être validée avant le paiement.')
+}
 
       // Mettre à jour statut
       const updated = await client.query(`
@@ -76,7 +84,7 @@ export async function PATCH(
         if (depotId) {
           for (const ligne of lignes.rows) {
             const stockRes = await client.query(
-              'SELECT quantite FROM stocks WHERE tenant_id=$1 AND produit_id=$2 AND depot_id=$3',
+             'SELECT quantite FROM stocks WHERE tenant_id=$1 AND produit_id=$2 AND depot_id=$3 FOR UPDATE',
               [tenantId, ligne.produit_id, depotId]
             )
             const qteAvant = Number(stockRes.rows[0]?.quantite || 0)
