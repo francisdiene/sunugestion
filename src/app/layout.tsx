@@ -3,7 +3,8 @@ import type { Metadata, Viewport } from 'next'
 export const metadata: Metadata = {
   title: 'TerangaGestion — Gestion PME Sénégal',
   description: 'Plateforme SaaS de gestion pour commerçants et PME au Sénégal',
-  icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
+  manifest: '/manifest.json',
+  icons: { icon: '/favicon.svg', shortcut: '/favicon.svg', apple: '/apple-touch-icon.png' },
 }
 
 export const viewport: Viewport = {

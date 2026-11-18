@@ -1,0 +1,32 @@
+﻿{
+    "id":  "/",
+    "short_name":  "TerangaGestion",
+    "background_color":  "#064E3B",
+    "icons":  [
+                  {
+                      "purpose":  "any",
+                      "type":  "image/png",
+                      "sizes":  "192x192",
+                      "src":  "/icon-192.png"
+                  },
+                  {
+                      "purpose":  "any",
+                      "type":  "image/png",
+                      "sizes":  "512x512",
+                      "src":  "/icon-512.png"
+                  },
+                  {
+                      "purpose":  "maskable",
+                      "type":  "image/png",
+                      "sizes":  "512x512",
+                      "src":  "/icon-512.png"
+                  }
+              ],
+    "description":  "Solution intelligente de gestion pour les PME africaines.",
+    "theme_color":  "#064E3B",
+    "display":  "standalone",
+    "name":  "TerangaGestion",
+    "scope":  "/",
+    "start_url":  "/",
+    "orientation":  "portrait"
+}
