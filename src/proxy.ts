@@ -92,7 +92,14 @@ export default async function proxy(request: NextRequest) {
   // Ressources publiques Next.js
   if (
     pathname.startsWith('/_next') ||
-    pathname.startsWith('/favicon')
+    pathname.startsWith('/favicon') ||
+    pathname === '/apple-touch-icon.png' ||
+    pathname === '/icon-192.png' ||
+    pathname === '/icon-512.png' ||
+    pathname === '/manifest.json' ||
+    pathname === '/terangagestion-icon.svg' ||
+    pathname === '/terangagestion-logo.png' ||
+    pathname === '/terangagestion-logo.svg'
   ) {
     return NextResponse.next()
   }
