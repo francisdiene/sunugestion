@@ -51,13 +51,13 @@ export default function FournisseursPage() {
       {showForm && (
         <form onSubmit={submit} style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 8px rgba(0,0,0,0.08)', marginBottom: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Nouveau fournisseur</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
-            <div style={{ gridColumn: 'span 2' }}><label style={lbl}>Nom *</label><input required value={form.nom} onChange={e => setForm({ ...form, nom: e.target.value })} style={inp} /></div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 16 }}>
+            <div style={{ gridColumn: '1 / -1' }}><label style={lbl}>Nom *</label><input required value={form.nom} onChange={e => setForm({ ...form, nom: e.target.value })} style={inp} /></div>
             <div><label style={lbl}>Téléphone</label><input value={form.telephone} onChange={e => setForm({ ...form, telephone: e.target.value })} style={inp} /></div>
             <div><label style={lbl}>Email</label><input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} style={inp} /></div>
             <div><label style={lbl}>NINEA</label><input value={form.ninea} onChange={e => setForm({ ...form, ninea: e.target.value })} style={inp} /></div>
             <div><label style={lbl}>RCCM</label><input value={form.rccm} onChange={e => setForm({ ...form, rccm: e.target.value })} style={inp} /></div>
-            <div style={{ gridColumn: 'span 3' }}><label style={lbl}>Adresse</label><input value={form.adresse} onChange={e => setForm({ ...form, adresse: e.target.value })} style={inp} /></div>
+            <div style={{ gridColumn: '1 / -1' }}><label style={lbl}>Adresse</label><input value={form.adresse} onChange={e => setForm({ ...form, adresse: e.target.value })} style={inp} /></div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 16 }}>
             <button type="button" onClick={() => setShowForm(false)} style={{ padding: '10px 20px', borderRadius: 8, border: '1px solid #e0e0e0', background: '#fff', fontSize: 13, cursor: 'pointer' }}>Annuler</button>
@@ -73,7 +73,7 @@ export default function FournisseursPage() {
             <p style={{ fontSize: 14 }}>Aucun fournisseur enregistré</p>
           </div>
         ) : fournisseurs.map(f => (
-          <div key={f.id} style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div key={f.id} style={{ background: '#fff', borderRadius: 12, padding: '20px 24px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               <div style={{ width: 44, height: 44, borderRadius: 10, background: '#eeedfe', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, color: '#534AB7', fontWeight: 700 }}>{f.nom[0]}</div>
               <div>
@@ -81,7 +81,7 @@ export default function FournisseursPage() {
                 <div style={{ fontSize: 12, color: '#aaa' }}>{f.telephone || '—'} {f.ninea ? `· NINEA: ${f.ninea}` : ''}</div>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap'  }}>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: 11, color: '#aaa' }}>Total achats</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: '#534AB7' }}>{Number(f.total_achats || 0).toLocaleString('fr-FR')} XOF</div>

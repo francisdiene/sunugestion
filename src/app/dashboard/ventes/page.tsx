@@ -153,7 +153,7 @@ export default function VentesPage() {
       {showForm && (
         <form onSubmit={submit} style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 8px rgba(0,0,0,0.08)', marginBottom: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Nouvelle vente</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 16, marginBottom: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 150px), 1fr))', gap: 16, marginBottom: 20 }}>
             <div><label style={labelStyle}>Type</label>
               <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} style={inputStyle}>
                 <option value="facture">Facture</option><option value="devis">Devis</option>

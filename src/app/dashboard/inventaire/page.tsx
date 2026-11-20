@@ -66,7 +66,7 @@ export default function InventairePage() {
     <DashboardLayout title="Inventaire" subtitle="Comptage physique et ajustement du stock">
       {msg && <div style={{ padding: '10px 16px', borderRadius: 8, background: msg.startsWith('✓') ? '#e8f8f2' : '#faece7', color: msg.startsWith('✓') ? '#0f6e56' : '#D85A30', fontSize: 13, marginBottom: 16 }}>{msg}</div>}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 12, marginBottom: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 12, marginBottom: 20 }}>
         <div style={{ background: '#fff', borderRadius: 10, padding: '14px 16px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', borderLeft: '3px solid #185FA5' }}>
           <div style={{ fontSize: 11, color: '#aaa' }}>Valeur stock théorique</div>
           <div style={{ fontSize: 16, fontWeight: 700, color: '#185FA5' }}>{valeurTheorique.toLocaleString('fr-FR')} XOF</div>
@@ -86,7 +86,7 @@ export default function InventairePage() {
         )}
       </div>
 
-      <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+      <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ background: '#fafafa' }}>

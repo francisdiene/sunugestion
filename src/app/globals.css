@@ -1,2 +1,116 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Inter, -apple-system, sans-serif; }
+
+/* ==========================================
+   TERANGAGESTION — BASE RESPONSIVE
+   ========================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  font-family: Inter, Arial, sans-serif;
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Éléments médias */
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+/* Éviter les débordements des enfants flex/grid */
+main,
+section,
+article,
+aside,
+header,
+footer {
+  min-width: 0;
+}
+
+/* Formulaires */
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  min-width: 0;
+}
+
+/* Tableaux : leur conteneur doit gérer le défilement */
+table {
+  max-width: 100%;
+}
+
+/* Liens et textes longs */
+p,
+a,
+span,
+td,
+th {
+  overflow-wrap: anywhere;
+}
+
+/* Respect des appareils tactiles */
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
+/* Zones de sécurité iPhone */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Petits smartphones */
+@media (max-width: 380px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Réduire les animations si demandé par l'utilisateur */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

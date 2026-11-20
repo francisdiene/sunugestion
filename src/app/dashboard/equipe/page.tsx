@@ -147,7 +147,7 @@ export default function EquipePage() {
           {editUser && (
             <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div onClick={() => setEditUser(null)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)' }} />
-              <div style={{ position: 'relative', background: '#fff', borderRadius: 16, padding: 24, width: '90%', maxWidth: 400, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
+              <div style={{ position: 'relative', background: '#fff', borderRadius: 16, padding: 'clamp(16px, 4vw, 24px)', width: 'calc(100% - 24px)', maxWidth: 400, maxHeight: 'calc(100dvh - 24px)', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
                 <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Modifier {editUser.nom_complet}</h3>
                 <div style={{ fontSize: 12, color: '#aaa', marginBottom: 18 }}>{editUser.email}</div>
                 <div style={{ marginBottom: 14 }}>
@@ -183,7 +183,7 @@ export default function EquipePage() {
           {confirmDelete && (
             <div style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div onClick={() => setConfirmDelete(null)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)' }} />
-              <div style={{ position: 'relative', background: '#fff', borderRadius: 16, padding: 24, width: '90%', maxWidth: 360, textAlign: 'center' }}>
+              <div style={{ position: 'relative', background: '#fff', borderRadius: 16, padding: 'clamp(16px, 4vw, 24px)', width: 'calc(100% - 24px)', maxWidth: 360, maxHeight: 'calc(100dvh - 24px)', overflowY: 'auto', textAlign: 'center' }}>
                 <div style={{ fontSize: 40, marginBottom: 12 }}>⚠️</div>
                 <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>Supprimer ce membre ?</h3>
                 <p style={{ fontSize: 13, color: '#888', marginBottom: 20 }}>Cette action est irréversible. Le membre perdra tout accès à la plateforme.</p>

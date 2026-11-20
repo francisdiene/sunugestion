@@ -287,7 +287,7 @@ export default function ProduitsPage() {
                 </div>
 
                 {/* Stats */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: 12, marginBottom: 20 }}>
                   {[
                     { label: 'Stock disponible', value: `${Number(selectedProduit.stock_total)} ${selectedProduit.unite}`, color: Number(selectedProduit.stock_total) <= 0 ? '#e24b4a' : '#1d9e75' },
                     { label: 'Marge brute', value: selectedProduit.prix_achat > 0 ? `${Math.round(((selectedProduit.prix_vente - selectedProduit.prix_achat) / selectedProduit.prix_vente) * 100)}%` : '—', color: '#1a1a1a' },
@@ -336,7 +336,7 @@ export default function ProduitsPage() {
                   </div>
                 )}
 
-                <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: 20, marginBottom: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 160px), 1fr))', gap: 20, marginBottom: 20 }}>
                   {/* Image éditable */}
                   <div>
                     <label style={lbl}>Image</label>
@@ -356,7 +356,7 @@ export default function ProduitsPage() {
                   </div>
 
                   {/* Champs */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 12 }}>
                     <div style={{ gridColumn: 'span 2' }}>
                       <label style={lbl}>Nom du produit *</label>
                       <input required value={editForm.nom} onChange={e => setEditForm({ ...editForm, nom: e.target.value })} style={inp} />
@@ -460,7 +460,7 @@ export default function ProduitsPage() {
       {showForm && (
         <form onSubmit={submit} style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 8px rgba(0,0,0,0.08)', marginBottom: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Nouveau produit</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: 24, marginBottom: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 24, marginBottom: 20 }}>
             <div>
               <label style={lbl}>Image du produit</label>
               <div onClick={() => fileRef.current?.click()} style={{ width: 200, height: 200, borderRadius: 10, border: '2px dashed #e0e0e0', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: preview ? 'transparent' : '#fafafa', overflow: 'hidden', position: 'relative' }}>
@@ -478,7 +478,7 @@ export default function ProduitsPage() {
               )}
               <div style={{ fontSize: 10, color: '#bbb', marginTop: 6 }}>JPG, PNG, WEBP — max 2MB</div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: 14 }}>
               <div style={{ gridColumn: 'span 2' }}><label style={lbl}>Nom du produit *</label><input required value={form.nom} onChange={e => setForm({ ...form, nom: e.target.value })} style={inp} /></div>
               <div><label style={lbl}>Code barre</label><input value={form.code_barre} onChange={e => setForm({ ...form, code_barre: e.target.value })} style={inp} /></div>
               <div><label style={lbl}>Prix de vente (XOF) *</label><input required type="number" min="0" value={form.prix_vente} onChange={e => setForm({ ...form, prix_vente: e.target.value })} style={inp} /></div>
@@ -514,7 +514,7 @@ export default function ProduitsPage() {
       )}
 
       {/* Liste produits en grille */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 220px), 1fr))', gap: 14 }}>
         {produits.length === 0 ? (
           <div style={{ gridColumn: '1/-1', background: '#fff', borderRadius: 12, padding: '60px', textAlign: 'center', color: '#ccc', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>◌</div>

@@ -37,7 +37,7 @@ export default function DepensesPage() {
     <DashboardLayout title="Dépenses" subtitle="Suivi des charges et dépenses">
       {msg && <div style={{ padding: '10px 16px', borderRadius: 8, background: msg.startsWith('✓') ? '#e8f8f2' : '#faece7', color: msg.startsWith('✓') ? '#0f6e56' : '#D85A30', fontSize: 13, marginBottom: 16 }}>{msg}</div>}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14, marginBottom: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 160px), 1fr))', gap: 14, marginBottom: 20 }}>
         <div style={{ background: '#fff', borderRadius: 10, padding: '16px 20px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', borderLeft: '3px solid #D85A30' }}>
           <div style={{ fontSize: 11, color: '#aaa', marginBottom: 4 }}>Total dépenses</div>
           <div style={{ fontSize: 20, fontWeight: 700, color: '#D85A30' }}>{total.toLocaleString('fr-FR')} XOF</div>
@@ -54,7 +54,7 @@ export default function DepensesPage() {
       {showForm && (
         <form onSubmit={submit} style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 8px rgba(0,0,0,0.08)', marginBottom: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Nouvelle dépense</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: 16 }}>
             <div><label style={lbl}>Montant (XOF) *</label><input required type="number" min="1" value={form.montant} onChange={e => setForm({ ...form, montant: e.target.value })} style={inp} /></div>
             <div><label style={lbl}>Catégorie</label><select value={form.categorie} onChange={e => setForm({ ...form, categorie: e.target.value })} style={inp}>{CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
             <div><label style={lbl}>Date</label><input type="date" value={form.date_depense} onChange={e => setForm({ ...form, date_depense: e.target.value })} style={inp} /></div>
@@ -69,7 +69,7 @@ export default function DepensesPage() {
         </form>
       )}
 
-      <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+      <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
         {depenses.length === 0 ? (
           <div style={{ padding: '60px', textAlign: 'center', color: '#ccc' }}><div style={{ fontSize: 40, marginBottom: 12 }}>◌</div><p>Aucune dépense enregistrée</p></div>
         ) : (

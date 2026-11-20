@@ -94,7 +94,7 @@ export default function ComptabilitePage() {
     <DashboardLayout title="Comptabilité SYSCOHADA" subtitle="Journal, balance et plan comptable">
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 20, background: '#fff', padding: 6, borderRadius: 10, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', width: 'fit-content' }}>
+      <div style={{ display: 'flex', gap: 4, marginBottom: 20, background: '#fff', padding: 6, borderRadius: 10, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', maxWidth: '100%', overflowX: 'auto' }}>
         {tabs.map(t => (
           <button key={t.key} onClick={() => setActiveTab(t.key)} style={{
             padding: '8px 18px', borderRadius: 7, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 500,
@@ -125,7 +125,7 @@ export default function ComptabilitePage() {
           </div>
 
           {/* Table journal */}
-          <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+          <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
             {loading ? (
               <div style={{ padding: '60px', textAlign: 'center', color: '#ccc', fontSize: 13 }}>Chargement…</div>
             ) : ecritures.length === 0 ? (
@@ -136,7 +136,7 @@ export default function ComptabilitePage() {
               </div>
             ) : (
               <>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <table style={{ width: '100%', minWidth: 560, borderCollapse: 'collapse' }}>
                   <thead>
                     <tr style={{ background: '#fafafa' }}>
                       {['Date', 'Journal', 'N° Compte', 'Intitulé', 'Libellé', 'Débit', 'Crédit'].map(h => (
@@ -156,8 +156,8 @@ export default function ComptabilitePage() {
                             <span style={{ padding: '2px 8px', borderRadius: 5, fontSize: 10, fontWeight: 700, background: j.bg, color: j.color }}>{e.journal}</span>
                           </td>
                           <td style={{ padding: '11px 14px', fontSize: 13, fontWeight: 700, fontFamily: 'monospace', color: '#0a1628' }}>{e.compte_numero}</td>
-                          <td style={{ padding: '11px 14px', fontSize: 12, color: '#555', maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.compte_intitule}</td>
-                          <td style={{ padding: '11px 14px', fontSize: 12, color: '#888', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.libelle}</td>
+                          <td style={{ padding: '11px 14px', fontSize: 12, color: '#555', maxWidth: 160, overflowX: 'auto', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.compte_intitule}</td>
+                          <td style={{ padding: '11px 14px', fontSize: 12, color: '#888', maxWidth: 200, overflowX: 'auto', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.libelle}</td>
                           <td style={{ padding: '11px 14px', fontSize: 13, fontWeight: Number(e.debit) > 0 ? 700 : 400, color: Number(e.debit) > 0 ? '#185FA5' : '#ddd', textAlign: 'right' }}>
                             {Number(e.debit) > 0 ? Number(e.debit).toLocaleString('fr-FR') : '—'}
                           </td>
@@ -189,14 +189,14 @@ export default function ComptabilitePage() {
 
       {/* ── BALANCE ───────────────────────────────────────────── */}
       {activeTab === 'balance' && (
-        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
+        <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
           {balance.length === 0 ? (
             <div style={{ padding: '60px', textAlign: 'center', color: '#ccc' }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>◌</div>
               <p>Aucune balance disponible — enregistre des ventes d'abord</p>
             </div>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table style={{ width: '100%', minWidth: 560, borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ background: '#0a1628' }}>
                   {['N° Compte', 'Intitulé', 'Classe', 'Total Débit', 'Total Crédit', 'Solde'].map(h => (
@@ -242,8 +242,8 @@ export default function ComptabilitePage() {
                   <span style={{ color: '#fff', fontSize: 13, fontWeight: 500 }}>{classeLabels[classe]}</span>
                   <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginLeft: 'auto' }}>{comptes.length} comptes</span>
                 </div>
-                <div style={{ background: '#fff', borderRadius: '0 0 8px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflow: 'hidden' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div style={{ background: '#fff', borderRadius: '0 0 8px 8px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', overflowX: 'auto' }}>
+                  <table style={{ width: '100%', minWidth: 560, borderCollapse: 'collapse' }}>
                     <tbody>
                       {comptes.map((c, i) => (
                         <tr key={c.id} style={{ borderTop: i > 0 ? '1px solid #f7f7f7' : 'none', background: i % 2 === 0 ? '#fff' : '#fafafa' }}>

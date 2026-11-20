@@ -81,7 +81,7 @@ export default function AchatsPage() {
       {showForm && (
         <form onSubmit={submit} style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 1px 8px rgba(0,0,0,0.08)', marginBottom: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Nouvel achat fournisseur</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 16, marginBottom: 20 }}>
             <div style={{ gridColumn: 'span 1' }}>
               <label style={labelStyle}>Fournisseur *</label>
               <select required value={form.fournisseur_id} onChange={e => setForm({ ...form, fournisseur_id: e.target.value })} style={inputStyle}>

@@ -114,7 +114,7 @@ export default function ParametresPage() {
             <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 14px', color: '#0a1628' }}>Informations générales</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div><label style={lbl}>Nom de la boutique *</label><input required value={boutique.nom} onChange={e => setBoutique({ ...boutique, nom: e.target.value })} style={inp} /></div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 12 }}>
                 <div><label style={lbl}>Téléphone</label><input value={boutique.telephone} onChange={e => setBoutique({ ...boutique, telephone: e.target.value })} placeholder="+221 77 000 00 00" style={inp} /></div>
                 <div><label style={lbl}>Email</label><input type="email" value={boutique.email} onChange={e => setBoutique({ ...boutique, email: e.target.value })} style={inp} /></div>
               </div>
@@ -125,7 +125,7 @@ export default function ParametresPage() {
           <div style={card}>
             <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 14px', color: '#0a1628' }}>Informations légales</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 12 }}>
                 <div><label style={lbl}>NINEA</label><input value={boutique.ninea} onChange={e => setBoutique({ ...boutique, ninea: e.target.value })} placeholder="Numéro fiscal" style={inp} /></div>
                 <div><label style={lbl}>RCCM</label><input value={boutique.rccm} onChange={e => setBoutique({ ...boutique, rccm: e.target.value })} placeholder="Registre commerce" style={inp} /></div>
               </div>
@@ -147,7 +147,7 @@ export default function ParametresPage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 110px), 1fr))', gap: 10, marginBottom: 14 }}>
             {[{ label: 'Plan', value: tenant?.plan?.toUpperCase() || '—', color: '#1d9e75' },
               { label: 'Utilisateurs', value: tenant?.nb_users || 0, color: '#185FA5' },
               { label: 'Produits', value: tenant?.nb_produits || 0, color: '#534AB7' }].map(s => (
@@ -171,7 +171,7 @@ export default function ParametresPage() {
         <form onSubmit={e => { e.preventDefault(); showMsg('✓ Paramètres facturation sauvegardés') }}>
           <div style={card}>
             <h3 style={{ fontSize: 15, fontWeight: 700, margin: '0 0 14px' }}>Numérotation des factures</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: 14 }}>
               <div>
                 <label style={lbl}>Préfixe</label>
                 <input value={facturation.prefixe_facture} onChange={e => setFacturation({ ...facturation, prefixe_facture: e.target.value })} style={inp} />
@@ -322,7 +322,7 @@ export default function ParametresPage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 220px), 1fr))', gap: 12 }}>
             {PLANS.map(p => {
               const actif = tenant?.plan === p.key
               return (

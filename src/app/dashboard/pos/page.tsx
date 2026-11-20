@@ -124,7 +124,7 @@ export default function POSPage() {
 
       {/* Grille produits */}
       <div style={{ flex: 1, padding: '12px 10px', overflowY: 'auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 150px), 1fr))', gap: 10 }}>
           {produitsFiltres.map(p => {
             const dispo = Number(p.stock_total) > 0
             const enPanier = panier.find(l => l.produit.id === p.id)
@@ -167,8 +167,8 @@ export default function POSPage() {
 
       {/* Bouton caisse flottant */}
       {nbArticles > 0 && !showCaisse && (
-        <div style={{ position: 'fixed', bottom: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 50 }}>
-          <button onClick={() => setShowCaisse(true)} style={{ background: '#1d9e75', border: 'none', color: '#fff', borderRadius: 50, padding: '16px 32px', cursor: 'pointer', fontSize: 16, fontWeight: 800, boxShadow: '0 6px 24px rgba(29,158,117,0.4)', whiteSpace: 'nowrap' }}>
+        <div style={{ position: 'fixed', bottom: 'calc(20px + env(safe-area-inset-bottom))', left: '50%', transform: 'translateX(-50%)', zIndex: 50 }}>
+          <button onClick={() => setShowCaisse(true)} style={{ background: '#1d9e75', border: 'none', color: '#fff', borderRadius: 50, padding: '14px clamp(18px, 5vw, 32px)', cursor: 'pointer', fontSize: 16, fontWeight: 800, boxShadow: '0 6px 24px rgba(29,158,117,0.4)', whiteSpace: 'nowrap' }}>
             🛒 {nbArticles} article(s) — {total.toLocaleString('fr-FR')} XOF
           </button>
         </div>
@@ -181,7 +181,7 @@ export default function POSPage() {
           <div onClick={() => setShowCaisse(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)' }} />
 
           {/* Panel caisse */}
-          <div style={{ position: 'relative', background: '#fff', borderRadius: '20px 20px 0 0', padding: '20px 16px', maxHeight: '85vh', overflowY: 'auto', boxShadow: '0 -8px 32px rgba(0,0,0,0.15)' }}>
+          <div style={{ position: 'relative', background: '#fff', borderRadius: '20px 20px 0 0', padding: '20px 16px', maxHeight: 'min(85dvh, calc(100dvh - 16px))', overflowY: 'auto', paddingBottom: 'calc(20px + env(safe-area-inset-bottom))', boxShadow: '0 -8px 32px rgba(0,0,0,0.15)' }}>
             {/* Poignée */}
             <div style={{ width: 40, height: 4, background: '#e0e0e0', borderRadius: 2, margin: '0 auto 16px' }} />
 
@@ -223,7 +223,7 @@ export default function POSPage() {
             </select>
 
             {/* Modes paiement */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginBottom: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8, marginBottom: 12 }}>
               {[
                 { key: 'cash', label: '💵 Cash' },
                 { key: 'wave', label: '📱 Wave' },

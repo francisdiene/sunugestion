@@ -94,7 +94,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 160px), 1fr))', gap: 12, marginBottom: 24 }}>
         {[
           { label: 'Chiffre d\'affaires', value: `${fmt(data?.resume?.ca_total || 0)} XOF`, color: '#1d9e75' },
           { label: 'Nombre de ventes',    value: data?.resume?.nb_ventes || 0,              color: '#185FA5' },
@@ -126,7 +126,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Top produits + Dépenses */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: 16 }}>
 
         {/* Top produits */}
         <div style={{ background: '#fff', borderRadius: 12, padding: '20px', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
